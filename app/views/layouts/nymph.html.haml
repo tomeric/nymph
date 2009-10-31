@@ -2,6 +2,7 @@
 %html
   %head
     %title Nymph
+    = stylesheet_link_tag "style"
     %style{ :type => "text/css" }
       :sass
         body
@@ -9,4 +10,5 @@
         .outdated
           :color red
   %body
-    = yield
+    #container
+      = yield
