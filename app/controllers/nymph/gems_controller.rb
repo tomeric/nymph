@@ -1,5 +1,7 @@
 module Nymph
   class GemsController < ApplicationController
+    layout 'nymph'
+
     def index
       @gems = Nymph::Gem.find_loaded
     end
