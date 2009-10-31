@@ -1,6 +1,3 @@
-require 'open-uri'
-require 'nokogiri'
-
 module Nymph
   class Gem
     attr_accessor :name,
@@ -62,13 +59,15 @@ module Nymph
     
     def rss_feeds
       return [] unless homepage
-
+      
       doc = Nokogiri::HTML(open(homepage))
       feeds = []
-
+      
       doc.xpath('//link[@type="application/atom+xml" or @type="application/rss+xml"]').each do |atom|
         feeds << { :title => atom.attributes["title"].value, :href => atom.attributes["href"].value }
       end
+      
+      feeds
     end
     
     def latest
