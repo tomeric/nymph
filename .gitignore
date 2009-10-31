@@ -1,0 +1,10 @@
+tmp/*
+log/*
+test/
+config/database.yml
+.DS_Store
+db/*.sqlite3
+*.swp
+*.log
+public/javascripts/cache
+public/stylesheets/*.css
