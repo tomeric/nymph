@@ -14,11 +14,23 @@ module Nymph
       end
       
       def find_by_name(name)
-        dependency = ::Gem::Dependency.new(name, ">= 0")
-        remotes    = ::Gem::SpecFetcher.fetcher.fetch(dependency)
+        dependency = ::Gem::Dependency.new(name, "> 0")
+        results    = ::Gem::SpecFetcher.fetcher.find_matching(dependency)
         
-        parse_gem(remotes.first.first) if remotes.present?
+        if results.present?
+          latest = results.first.first
+          name   = "#{latest[0]}-#{latest[1].version}"
+          source = URI.parse(results.first.last)
+          remote = ::Gem::SpecFetcher.fetcher.fetch_spec([name], source)
+          
+          parse_gem(remote) if remote.present?
+        end
       end
+      
+      # dependency = ::Gem::Dependency.new(name, ">= 0")
+      # remotes    = ::Gem::SpecFetcher.fetcher.find_matching(dependency, "http://gems.github.com")
+      # 
+      # parse_gem(remotes.first.first) if remotes.present?
     
       def parse_gem(gem)
         Gem.new(:name            => gem.name,
