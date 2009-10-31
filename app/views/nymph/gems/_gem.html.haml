@@ -1,5 +1,4 @@
-%li 
-  #{gem.name} (#{gem.current_version})
-  - if gem.dependencies
-    %ul
-      = render :partial => "dependency", :collection => gem.dependencies
+%tr
+  %td= link_to gem.name, nymph_gem_path(gem.name)
+  %td= link_to gem.dependencies.length, nymph_gem_path(gem.name, :anchor => "dependencies")
+  %td= link_to gem.current_version, nymph_gem_path(gem.name, :anchor => "versions")

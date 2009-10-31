@@ -1,1 +1,3 @@
-%li #{dependency.name} (#{dependency.requirements.join(', ')})
+%li
+  = link_to dependency.name, nymph_gem_path(dependency.name)
+  (#{dependency.requirements.join(', ')})
