@@ -28,11 +28,6 @@ module Nymph
           parse_gem(remote) if remote.present?
         end
       end
-      
-      # dependency = ::Gem::Dependency.new(name, ">= 0")
-      # remotes    = ::Gem::SpecFetcher.fetcher.find_matching(dependency, "http://gems.github.com")
-      # 
-      # parse_gem(remotes.first.first) if remotes.present?
     
       def parse_gem(gem)
         Gem.new(:name            => gem.name,
@@ -49,6 +44,10 @@ module Nymph
       end
     end
     
+    def to_json
+      "{ name: '#{name}', current_version: '#{current_version}', latest_version: '#{latest.try(:current_version)}'}"
+    end
+    
     def loaded
       Gem.find_loaded.detect { |gem| gem.name == name }
     end
@@ -60,11 +59,11 @@ module Nymph
     def rss_feeds
       return [] unless homepage
       
-      doc = Nokogiri::HTML(open(homepage))
+      doc = ::Nokogiri::HTML(open(homepage))
       feeds = []
       
-      doc.xpath('//link[@type="application/atom+xml" or @type="application/rss+xml"]').each do |atom|
-        feeds << { :title => atom.attributes["title"].value, :href => atom.attributes["href"].value }
+      doc.css('link[@type="application/atom+xml"], link[@type="application/rss+xml"]').each do |feed|
+        feeds << { :title => feed["title"], :url => feed["href"] }
       end
       
       feeds

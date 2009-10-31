@@ -14,14 +14,11 @@
 
 - if @gem.latest.present?
   %h2#version Latest version
-  %p{ :class => @gem.outdated? ? 'outdated version' : 'outdated version' }
+  %p{ :class => @gem.outdated? ? 'outdated version' : 'version' }
     = @gem.latest.current_version
     - if @gem.loaded
       (current: #{@gem.loaded.current_version})
 
-- if @gem.rss_feeds.present?
-  %h2 RSS Feeds
-  - @gem.rss_feeds.each do |feed|
-    Dummy
+#feeds
 
 %p= link_to "&lt; Back", :back
