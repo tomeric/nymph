@@ -1,10 +1,8 @@
-# Add your own tasks in files placed in lib/tasks ending in .rake,
-# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
-
-require(File.join(File.dirname(__FILE__), 'config', 'boot'))
-
-require 'rake'
-require 'rake/testtask'
-require 'rake/rdoctask'
-
-require 'tasks/rails'
+namespace :nymph do
+  desc "list all outdated gems that are used by this rails application"
+  task :outdated => :environment do
+    loaded   = Nymph::Gem.find_loaded
+    outdated = loaded.reject { |g| !g.outdated? }
+    puts outdated.map { |g| "#{g.name} (#{g.current_version} vs #{g.latest.current_version})"}.join("\n")
+  end
+end

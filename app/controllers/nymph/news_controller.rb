@@ -1,5 +1,7 @@
 module Nymph
   class NewsController < ApplicationController
+    layout false
+
     def show
       @gem   = Nymph::Gem.find_by_name(params[:id])
       @feeds = @gem.rss_feeds 
