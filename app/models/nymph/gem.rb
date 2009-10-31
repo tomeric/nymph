@@ -47,7 +47,11 @@ module Nymph
     end
     
     def loaded
-      
+      Gem.find_loaded.detect { |gem| gem.name == name }
+    end
+    
+    def outdated?
+      loaded.current_version != latest.current_version
     end
     
     def latest
