@@ -1,6 +1,6 @@
 %h1= @gem.name
 .description
-  = simple_format auto_link(@gem.description)
+  %p= auto_link(@gem.description)
 
   - if @gem.homepage
     %p 

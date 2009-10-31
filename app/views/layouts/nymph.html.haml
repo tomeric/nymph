@@ -3,8 +3,10 @@
   %head
     %meta{ :charset => "utf-8" }/
     %title Nymph
-    = javascript_include_tag 'jquery'
-    = javascript_include_tag 'jquery.jfeed.pack'
+    - javascript_tag do
+      = render :partial => "nymph/jquery"
+    - javascript_tag do
+      = render :partial => "nymph/jfeed"
     :javascript
       jQuery(function($) {
         $.fn.gemRSS = function() {
