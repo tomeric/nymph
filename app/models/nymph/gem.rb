@@ -53,7 +53,7 @@ module Nymph
     end
     
     def outdated?
-      loaded.current_version != latest.current_version
+      loaded && loaded.current_version != latest.current_version
     end
     
     def latest
