@@ -2,4 +2,5 @@
   %td.gem= link_to gem.name, nymph_gem_path(gem.name)
   %td.dependencies= link_to gem.dependencies.length, nymph_gem_path(gem.name, :anchor => "dependencies")
   %td.version= link_to gem.current_version, nymph_gem_path(gem.name, :anchor => "versions")
-  %td.status loading
+  %td.status
+   %span.loading loading
