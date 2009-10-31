@@ -1,10 +1,10 @@
 - if @gems.present?
   %h1 Loaded Gems
-  %table
+  %table.nymph-table
     %thead
       %tr
-        %th Gem
-        %th Dependencies
-        %th Version
+        %th.gem Gem
+        %th.dependencies Dependencies
+        %th.version Version
     %tbody
       = render :partial => "gem", :collection => @gems

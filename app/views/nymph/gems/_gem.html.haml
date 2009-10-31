@@ -1,4 +1,4 @@
-%tr
+%tr{ :class => cycle("odd", "even") }
   %td= link_to gem.name, nymph_gem_path(gem.name)
   %td= link_to gem.dependencies.length, nymph_gem_path(gem.name, :anchor => "dependencies")
   %td= link_to gem.current_version, nymph_gem_path(gem.name, :anchor => "versions")

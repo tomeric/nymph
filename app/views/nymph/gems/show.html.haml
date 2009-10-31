@@ -1,8 +1,11 @@
 %h1= @gem.name
-= simple_format auto_link(@gem.description)
+.description
+  = simple_format auto_link(@gem.description)
 
-- if @gem.homepage
-  %p Homepage: #{link_to @gem.homepage, @gem.homepage}
+  - if @gem.homepage
+    %p 
+      %strong Homepage: 
+      #{link_to "#{@gem.homepage} &raquo;", @gem.homepage}
 
 - if @gem.dependencies.present?
   %h2#dependencies Dependencies
@@ -11,7 +14,7 @@
 
 - if @gem.latest.present?
   %h2#version Latest version
-  %p{ :class => @gem.outdated? ? 'outdated' : nil }
+  %p{ :class => @gem.outdated? ? 'outdated version' : 'outdated version' }
     = @gem.latest.current_version
     - if @gem.loaded
       (current: #{@gem.loaded.current_version})

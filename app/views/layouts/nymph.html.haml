@@ -2,13 +2,10 @@
 %html
   %head
     %title Nymph
-    = stylesheet_link_tag "style"
+    =# stylesheet_link_tag "style"
     %style{ :type => "text/css" }
-      :sass
-        body
-          :font 12px/18px verdana, sans-serif
-        .outdated
-          :color red
+      = render :partial => "nymph/css"
+
   %body
     #container
       = yield
