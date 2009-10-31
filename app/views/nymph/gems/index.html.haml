@@ -1,5 +1,10 @@
 - if @gems.present?
   %h1 Loaded Gems
-  %ul
-    - @gems.each do |gem|
-      = render :partial => "gem", :object => gem
+  %table
+    %thead
+      %tr
+        %th Gem
+        %th Dependencies
+        %th Version
+    %tbody
+      = render :partial => "gem", :collection => @gems

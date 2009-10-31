@@ -1,0 +1,7 @@
+%h1= @gem.name
+= @gem.description
+
+- if @gem.dependencies.present?
+  %h2 Dependencies
+  %ul
+    = render :partial => 'dependency', :collection => @gem.dependencies

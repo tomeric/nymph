@@ -3,10 +3,46 @@ require 'nokogiri'
 
 module Nymph
   class Gem
-    @@configuration = ::Gem.configuration.send(:hash).dup.freeze
-    cattr_accessor :configuration
+    attr_accessor :name,
+                  :description,
+                  :current_version,
+                  :dependencies,
+                  :requirements
+                  :rss_feeds
     
-    attr_accessor :name, :rss_feeds, :current_version, :dependencies, :requirements
+    class << self
+      def find_loaded
+        Hash[::Gem.loaded_specs].values.map do |gem|
+          parse_gem(gem)
+        end
+      end
+      
+      def find_by_name(name)
+        dependency = ::Gem::Dependency.new(name, "> 0")
+        results    = ::Gem::SpecFetcher.fetcher.find_matching(dependency)
+        
+        if results.present?
+          latest = results.first.first
+          name   = "#{latest[0]}-#{latest[1].version}"
+          source = URI.parse(results.first.last)
+          remote = ::Gem::SpecFetcher.fetcher.fetch_spec([name], source)
+          
+          parse_gem(remote) if remote.present?
+        end
+      end
+      
+      # dependency = ::Gem::Dependency.new(name, ">= 0")
+      # remotes    = ::Gem::SpecFetcher.fetcher.find_matching(dependency, "http://gems.github.com")
+      # 
+      # parse_gem(remotes.first.first) if remotes.present?
+    
+      def parse_gem(gem)
+        Gem.new(:name            => gem.name,
+                :description     => gem.description,
+                :current_version => gem.respond_to?(:version) ? gem.version : nil,
+                :dependencies    => Nymph::Dependency.parse(gem.dependencies))      
+      end
+    end
     
     def initialize(options = {})
       options.each do |key, value|
@@ -14,32 +50,30 @@ module Nymph
       end
     end
     
-    def self.sources
-      configuration[:sources]
+    def loaded
+      Gem.find_loaded.detect { |gem| gem.name == name }
     end
     
-    def self.loaded
-      Hash[::Gem.loaded_specs].values.map do |gem|
-        parse_gem(gem)
-      end
+    def outdated?
+      loaded.current_version != latest.current_version
     end
     
-    def self.parse_gem(gem)
-      Gem.new(:name            => gem.name,
-              :current_version => gem.respond_to?(:version) ? gem.version : nil,
-              :dependencies    => Dependency.parse(gem.dependencies),
-              :rss_feeds       => get_rss_feeds(gem))      
-    end
-    
-    def self.get_rss_feeds(gem)
-      return []# unless gem.homepage
-      
-      doc = Nokogiri::HTML(open(gem.homepage))
+    def rss_feeds
+      return [] unless homepage
+
+      doc = Nokogiri::HTML(open(homepage))
       feeds = []
-      
+
       doc.xpath('//link[@type="application/atom+xml" or @type="application/rss+xml"]').each do |atom|
         feeds << { :title => atom.attributes["title"].value, :href => atom.attributes["href"].value }
       end
+    end
+    
+    def latest
+      dependency = ::Gem::Dependency.new(name, ">= #{current_version}")
+      remotes    = ::Gem::SpecFetcher.fetcher.fetch(dependency)
+      
+      Gem.parse_gem(remotes.first.first) if remotes.present?
     end
   end
 end
