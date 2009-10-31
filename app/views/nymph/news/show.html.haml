@@ -1,0 +1,5 @@
+- if @feeds.present?
+  %h2 RSS Feeds
+  %ul
+    - @feeds.each do |feed|
+      %li= link_to feed[:title], feed[:url]

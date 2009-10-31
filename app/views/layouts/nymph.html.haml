@@ -1,7 +1,26 @@
 !!!HTML
 %html
   %head
+    %meta{ :charset => "utf-8" }/
     %title Nymph
+    = javascript_include_tag 'jquery'
+    = javascript_include_tag 'jquery.jfeed.pack'
+    :javascript
+      jQuery(function($) {
+        $.fn.gemRSS = function() {
+          return $(this).each(function() {
+            var gem_name = $('h1').text();
+          
+            $.get("/nymph/news/" + gem_name, function($placeholder) {
+              return function(data, textStatus) {
+                $placeholder.replaceWith(data);
+              }
+            }($(this)));        
+          });
+        }
+        
+        $('#feeds').gemRSS();
+      });
     %style{ :type => "text/css" }
       :sass
         body

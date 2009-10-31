@@ -1,10 +1,30 @@
-- if @gems.present?
-  %h1 Loaded Gems
-  %table
-    %thead
-      %tr
-        %th Gem
-        %th Dependencies
-        %th Version
-    %tbody
-      = render :partial => "gem", :collection => @gems
+%h1 Loaded Gems
+%table
+  %thead
+    %tr
+      %th.gem Gem
+      %th.dependencies Dependencies
+      %th.version Version
+      %th.status Status
+  %tbody
+    = render :partial => "gem", :collection => @gems
+
+:javascript
+  jQuery(function() {
+    $('table tbody td.gem a').each(function() {
+      var $anchor = $(this);
+      var $tr     = $(this).parents('tr');
+      
+      $.get("/nymph/gems/" + $anchor.text() + "/outdated", function($_tr) {
+        return function(data, textStatus) {
+          if(data == 'NO') {
+            $_tr.addClass('up-to-date');
+            $_tr.find('.status').html('Up to date');
+          } else {
+            $_tr.addClass('needs-update');
+            $_tr.find('.status').html('Needs update');
+          }
+        }
+      }($tr));
+    })
+  })
