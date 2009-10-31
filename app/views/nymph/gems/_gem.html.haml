@@ -1,0 +1,5 @@
+%li 
+  #{gem.name} (#{gem.current_version})
+  - if gem.dependencies
+    %ul
+      = render :partial => "dependency", :collection => gem.dependencies

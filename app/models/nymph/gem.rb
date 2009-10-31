@@ -17,14 +17,14 @@ module Nymph
     
     def self.loaded
       Hash[::Gem.loaded_specs].values.map do |gem|
-        Gem.new(:name            => gem.name,
-                :current_version => gem.version,
-                :dependencies    => parse_dependencies(gem))
+        parse_gem(gem)
       end
     end
     
-    def self.parse_dependencies(gem)
-      []
+    def self.parse_gem(gem)
+      Gem.new(:name            => gem.name,
+              :current_version => gem.respond_to?(:version) ? gem.version : nil,
+              :dependencies    => Dependency.parse(gem.dependencies))      
     end
   end
 end

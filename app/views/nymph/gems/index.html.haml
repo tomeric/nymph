@@ -2,4 +2,4 @@
   %h1 Loaded Gems
   %ul
     - @gems.each do |gem|
-      %li #{gem.name} (#{gem.current_version})
+      = render :partial => "gem", :object => gem

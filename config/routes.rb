@@ -1,3 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :loaded_gems
+  map.namespace(:nymph) do |nymph|
+    nymph.resources :gems
+  end
 end
