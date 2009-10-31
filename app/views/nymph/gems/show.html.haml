@@ -1,4 +1,13 @@
 %h1= @gem.name
+
+- if @gem.latest.present?
+  %h2#version Latest version
+  %p{ :class => @gem.outdated? ? 'outdated version' : 'version' }
+    = @gem.latest.current_version
+    - if @gem.loaded
+      (current: #{@gem.loaded.current_version})
+
+%h2 Description
 .description
   %p= auto_link(@gem.description)
 
@@ -11,13 +20,6 @@
   %h2#dependencies Dependencies
   %ul
     = render :partial => 'dependency', :collection => @gem.dependencies
-
-- if @gem.latest.present?
-  %h2#version Latest version
-  %p{ :class => @gem.outdated? ? 'outdated version' : 'version' }
-    = @gem.latest.current_version
-    - if @gem.loaded
-      (current: #{@gem.loaded.current_version})
 
 #feeds
 
