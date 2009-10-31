@@ -4,6 +4,7 @@ module Nymph
                   :description,
                   :current_version,
                   :dependencies,
+                  :homepage,
                   :requirements
     
     class << self
@@ -36,6 +37,7 @@ module Nymph
         Gem.new(:name            => gem.name,
                 :description     => gem.description,
                 :current_version => gem.respond_to?(:version) ? gem.version : nil,
+                :homepage        => gem.respond_to?(:homepage) ? gem.homepage : nil,
                 :dependencies    => Nymph::Dependency.parse(gem.dependencies))      
       end
     end
