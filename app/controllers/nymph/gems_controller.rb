@@ -23,5 +23,14 @@ module Nymph
     def load_gem_configuration
       ::Gem.configuration = ::Gem::ConfigFile.new([])
     end
+    
+    def feed
+      case URI.parse(params[:feed])
+      when URI::HTTP, URI::HTTPS
+        render :text => open(params[:feed]).read
+      else
+        render :nothing => true 
+      end
+    end
   end
 end

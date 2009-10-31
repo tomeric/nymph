@@ -16,4 +16,9 @@
     - if @gem.loaded
       (current: #{@gem.loaded.current_version})
 
+- if @gem.rss_feeds.present?
+  %h2 RSS Feeds
+  - @gem.rss_feeds.each do |feed|
+    Dummy
+
 %p= link_to "&lt; Back", :back

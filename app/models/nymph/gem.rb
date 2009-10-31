@@ -6,6 +6,7 @@ module Nymph
                   :dependencies,
                   :homepage,
                   :requirements
+                  :rss_feeds
     
     class << self
       def find_loaded
@@ -54,6 +55,19 @@ module Nymph
     
     def outdated?
       loaded && loaded.current_version != latest.current_version
+    end
+    
+    def rss_feeds
+      return [] unless homepage
+      
+      doc = Nokogiri::HTML(open(homepage))
+      feeds = []
+      
+      doc.xpath('//link[@type="application/atom+xml" or @type="application/rss+xml"]').each do |atom|
+        feeds << { :title => atom.attributes["title"].value, :href => atom.attributes["href"].value }
+      end
+      
+      feeds
     end
     
     def latest
